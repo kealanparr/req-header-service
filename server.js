@@ -2,19 +2,17 @@ var express = require('express');
 var cors = require('cors');
 var app = express();
 
-function isValidDate(inputDate) {
-	return inputDate && inputDate.getTime && !isNaN(inputDate.getTime());
-}
-
 // Some legacy browsers choke on HTTP 204
 app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(express.static('public'));
 
-app.get("/api/", function (req, res) {
+app.get("/api/whoami", function (req, res) {
 	
-	let today = new Date()
+	let ip = req.socket.remoteAddress
+	let lang = req.headers["accept-language"];
+	let userAgent = req.headers['user-agent'];
 	
-	res.json({ unix: today.valueOf(), utc: today.toGMTString() });
+	res.json({ ipaddress: ip, language: lang, software: userAgent });
 });
 
 // Return index.html
